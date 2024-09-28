@@ -8,8 +8,6 @@ import Cart from './src/screens/Cart';
 import store from './src/redux/store';
 import {Provider} from 'react-redux';
 import {Text, View, Button} from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialIcons';
-import {useSelector} from 'react-redux';
 
 const Stack = createNativeStackNavigator();
 
@@ -27,10 +25,13 @@ function App() {
           <Stack.Screen
             name="Home"
             component={ProductList}
-            options={({navigation}) => ({
+            options={({navigation, route}) => ({
               headerTitle: () => <CenteredHeader />,
               headerRight: () => (
-                <Icon name="shopping-cart" size={24} color="#000" />
+                <Button
+                  title="Cart"
+                  onPress={() => navigation.navigate('Cart')}
+                />
               ),
             })}
           />
