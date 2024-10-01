@@ -1,3 +1,4 @@
+// cartSlice.js
 import {createSlice} from '@reduxjs/toolkit';
 
 const cartSlice = createSlice({
@@ -7,24 +8,20 @@ const cartSlice = createSlice({
   },
   reducers: {
     addToCart: (state, action) => {
-      const {id, selectedSize} = action.payload; // Destructure the id and selectedSize from the payload
       const existingProduct = state.items.find(
-        item => item.id === id && item.selectedSize === selectedSize,
-      ); // Check for existing product with the same size
-
+        item => item.id === action.payload.id,
+      );
       if (existingProduct) {
-        existingProduct.quantity += 1; // Increase quantity if found
+        existingProduct.quantity += 1;
       } else {
-        // Push new product with size and quantity
-        state.items.push({
-          ...action.payload,
-          quantity: 1,
-        });
+        state.items.push({...action.payload, quantity: 1});
       }
     },
-    // Add more reducers as needed (e.g., removeFromCart)
+    removeFromCart: (state, action) => {
+      state.items = state.items.filter(item => item.id !== action.payload.id);
+    },
   },
 });
 
-export const {addToCart} = cartSlice.actions;
+export const {addToCart, removeFromCart} = cartSlice.actions;
 export default cartSlice.reducer;

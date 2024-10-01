@@ -1,9 +1,11 @@
 import React from 'react';
-import {View, Text, FlatList, StyleSheet} from 'react-native';
-import {useSelector} from 'react-redux';
+import {View, Text, FlatList, StyleSheet, Button} from 'react-native';
+import {useSelector, useDispatch} from 'react-redux';
+import {removeFromCart} from '../redux/cartSlice';
 
 const Cart = () => {
-  const cartItems = useSelector(state => state.cart.items); // Access the cart items from Redux
+  const cartItems = useSelector(state => state.cart.items);
+  const dispatch = useDispatch();
 
   const renderItem = ({item}) => (
     <View style={styles.cartItemContainer}>
@@ -12,10 +14,14 @@ const Cart = () => {
         {item.price.amount} {item.price.currency}
       </Text>
       <Text style={styles.cartItemQuantity}>Quantity: {item.quantity}</Text>
-      {/* Display the selected size */}
       {item.selectedSize && (
         <Text style={styles.cartItemSize}>Size: {item.selectedSize}</Text>
       )}
+      <Button
+        title="Remove"
+        onPress={() => dispatch(removeFromCart({id: item.id}))}
+        color="#FF6347"
+      />
     </View>
   );
 
