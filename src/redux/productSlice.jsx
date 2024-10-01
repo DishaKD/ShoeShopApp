@@ -1,6 +1,5 @@
 import {createSlice, createAsyncThunk} from '@reduxjs/toolkit';
 
-// Create an async thunk for fetching products using XMLHttpRequest
 export const fetchProducts = createAsyncThunk(
   'products/fetchProducts',
   async () => {

@@ -7,6 +7,7 @@ import {
   Button,
   ScrollView,
   TouchableOpacity,
+  Alert,
 } from 'react-native';
 import {useDispatch} from 'react-redux';
 import {addToCart} from '../redux/cartSlice';
@@ -15,10 +16,15 @@ const ProductDetails = ({route}) => {
   const {product} = route.params;
   const dispatch = useDispatch();
 
-  const [selectedSize, setSelectedSize] = useState(null); // State to store selected size
+  const [selectedSize, setSelectedSize] = useState(null);
 
   const handleSizeSelect = size => {
     setSelectedSize(size);
+  };
+
+  const handleAddToCart = () => {
+    dispatch(addToCart({...product, selectedSize}));
+    Alert.alert('Success', 'Product added to cart!');
   };
 
   return (
@@ -66,7 +72,7 @@ const ProductDetails = ({route}) => {
         {product.colour && (
           <View
             style={{flexDirection: 'row', alignItems: 'center', marginTop: 8}}>
-            <Text style={{color: 'blue'}}>Colour:</Text>
+            <Text style={{color: 'black'}}>Colour: {product.colour}</Text>
             <View
               style={{
                 width: 15,
@@ -107,17 +113,17 @@ const ProductDetails = ({route}) => {
 
       <Button
         title="Add to Cart"
-        onPress={() => dispatch(addToCart({...product, selectedSize}))} // Add selectedSize to the payload
+        onPress={handleAddToCart}
         color="#007BFF"
         style={{marginTop: 16}}
-        disabled={!selectedSize} // Disable button if size not selected
+        disabled={!selectedSize}
       />
       <Button
         title="Buy Now"
         onPress={() => console.log('Buying product')}
         color="#28A745"
         style={{marginTop: 8}}
-        disabled={!selectedSize} // Disable button if size not selected
+        disabled={!selectedSize}
       />
     </ScrollView>
   );

@@ -22,13 +22,11 @@ const ProductList = () => {
   }, [dispatch]);
 
   const renderItem = ({item}) => {
-    // Function to determine the background color based on item color
     const getColorStyle = () => {
       if (Array.isArray(item.colour)) {
-        // If there are multiple colors, return a mixed color (optional: can create a gradient effect)
-        return {backgroundColor: 'linear-gradient(to right, red, blue)'}; // Placeholder for gradient
+        return {backgroundColor: 'linear-gradient(to right, red, blue)'};
       } else {
-        return {backgroundColor: item.colour || 'gray'}; // Default to gray if no color provided
+        return {backgroundColor: item.colour || 'gray'};
       }
     };
 
