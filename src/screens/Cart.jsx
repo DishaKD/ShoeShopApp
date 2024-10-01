@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, FlatList, StyleSheet, TouchableOpacity} from 'react-native';
+import {View, Text, FlatList, StyleSheet} from 'react-native';
 import {useSelector} from 'react-redux';
 
 const Cart = () => {
@@ -12,6 +12,10 @@ const Cart = () => {
         {item.price.amount} {item.price.currency}
       </Text>
       <Text style={styles.cartItemQuantity}>Quantity: {item.quantity}</Text>
+      {/* Display the selected size */}
+      {item.selectedSize && (
+        <Text style={styles.cartItemSize}>Size: {item.selectedSize}</Text>
+      )}
     </View>
   );
 
@@ -66,6 +70,11 @@ const styles = StyleSheet.create({
   cartItemQuantity: {
     fontSize: 14,
     color: '#555',
+  },
+  cartItemSize: {
+    fontSize: 14,
+    color: '#555',
+    marginTop: 4,
   },
 });
 
