@@ -1,40 +1,46 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- */
-
+/* eslint-disable react/no-unstable-nested-components */
 import * as React from 'react';
-import {Text, View} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import ProductList from './src/screens/ProductList';
+import ProductDetails from './src/screens/ProductDetails';
+import Cart from './src/screens/Cart';
+import store from './src/redux/store';
+import {Provider} from 'react-redux';
+import {Text, View, Button} from 'react-native';
 
-function HomeScreen() {
+const Stack = createNativeStackNavigator();
+
+const CenteredHeader = () => (
+  <View className="flex-1 justify-center items-center h-14">
+    <Text className="font-extrabold text-black text-xl">Shoe Shop</Text>
+  </View>
+);
+
+function App() {
   return (
-    <View className="align-middle">
-      <Text>Home!</Text>
-    </View>
+    <Provider store={store}>
+      <NavigationContainer>
+        <Stack.Navigator>
+          <Stack.Screen
+            name="Home"
+            component={ProductList}
+            options={({navigation, route}) => ({
+              headerTitle: () => <CenteredHeader />,
+              headerRight: () => (
+                <Button
+                  title="Cart"
+                  onPress={() => navigation.navigate('Cart')}
+                />
+              ),
+            })}
+          />
+          <Stack.Screen name="Details" component={ProductDetails} />
+          <Stack.Screen name="Cart" component={Cart} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </Provider>
   );
 }
 
-function SettingsScreen() {
-  return (
-    <View className="align-middle">
-      <Text>Settings!</Text>
-    </View>
-  );
-}
-
-const Tab = createBottomTabNavigator();
-
-export default function App() {
-  return (
-    <NavigationContainer>
-      <Tab.Navigator>
-        <Tab.Screen name="Home" component={HomeScreen} />
-        <Tab.Screen name="Settings" component={SettingsScreen} />
-      </Tab.Navigator>
-    </NavigationContainer>
-  );
-}
+export default App;
