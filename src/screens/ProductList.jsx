@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 import React, {useEffect} from 'react';
 import {
   View,
@@ -20,21 +21,74 @@ const ProductList = () => {
     dispatch(fetchProducts());
   }, [dispatch]);
 
-  const renderItem = ({item}) => (
-    <TouchableOpacity
-      onPress={() => navigation.navigate('Details', {product: item})}>
-      <View className="bg-white p-4 rounded-lg shadow-md m-2">
-        <Image source={{uri: item.mainImage}} className="w-full h-40 rounded" />
-        <Text className="text-black font-bold mt-2">{item.name}</Text>
-        <Text className="text-gray-500">
-          {item.brandName || 'Unknown Brand'}
-        </Text>
-        <Text className="text-black font-bold mt-2">
-          {item.price.amount} {item.price.currency}
-        </Text>
-      </View>
-    </TouchableOpacity>
-  );
+  const renderItem = ({item}) => {
+    // Function to determine the background color based on item color
+    const getColorStyle = () => {
+      if (Array.isArray(item.colour)) {
+        // If there are multiple colors, return a mixed color (optional: can create a gradient effect)
+        return {backgroundColor: 'linear-gradient(to right, red, blue)'}; // Placeholder for gradient
+      } else {
+        return {backgroundColor: item.colour || 'gray'}; // Default to gray if no color provided
+      }
+    };
+
+    return (
+      <TouchableOpacity
+        onPress={() => navigation.navigate('Details', {product: item})}>
+        <View
+          style={{
+            backgroundColor: 'white',
+            padding: 16,
+            borderRadius: 8,
+            margin: 8,
+            shadowOpacity: 0.3,
+          }}>
+          <Image
+            source={{uri: item.mainImage}}
+            style={{width: '100%', height: 160, borderRadius: 8}}
+          />
+          <Text style={{color: 'black', fontWeight: 'bold', marginTop: 8}}>
+            {item.name}
+          </Text>
+          <Text style={{color: 'gray'}}>
+            {item.brandName || 'Unknown Brand'}
+          </Text>
+          <Text style={{color: 'black', fontWeight: 'bold', marginTop: 8}}>
+            {item.price.amount} {item.price.currency}
+          </Text>
+
+          {item?.stockStatus && (
+            <Text
+              style={{
+                color: item.stockStatus === 'IN STOCK' ? 'green' : 'red',
+                marginTop: 4,
+              }}>
+              {item.stockStatus}
+            </Text>
+          )}
+
+          {item?.colour && (
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                marginTop: 8,
+              }}>
+              <Text style={{color: 'blue', marginRight: 8}}>Colour:</Text>
+              <View
+                style={{
+                  width: 15,
+                  height: 15,
+                  borderRadius: 15 / 2,
+                  ...getColorStyle(), // Apply the color style based on the item color
+                }}
+              />
+            </View>
+          )}
+        </View>
+      </TouchableOpacity>
+    );
+  };
 
   return (
     <SafeAreaView style={styles.container}>
