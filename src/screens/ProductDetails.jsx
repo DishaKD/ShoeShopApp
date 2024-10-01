@@ -1,11 +1,25 @@
-import React from 'react';
-import {View, Text, Image, Button, ScrollView} from 'react-native';
+/* eslint-disable react-native/no-inline-styles */
+import React, {useState} from 'react';
+import {
+  View,
+  Text,
+  Image,
+  Button,
+  ScrollView,
+  TouchableOpacity,
+} from 'react-native';
 import {useDispatch} from 'react-redux';
 import {addToCart} from '../redux/cartSlice';
 
 const ProductDetails = ({route}) => {
   const {product} = route.params;
   const dispatch = useDispatch();
+
+  const [selectedSize, setSelectedSize] = useState(null); // State to store selected size
+
+  const handleSizeSelect = size => {
+    setSelectedSize(size);
+  };
 
   return (
     <ScrollView style={{flex: 1, padding: 16}}>
@@ -58,7 +72,7 @@ const ProductDetails = ({route}) => {
                 width: 15,
                 height: 15,
                 borderRadius: 15 / 2,
-                backgroundColor: product.colour, // Assumes a single color; customize for multiple
+                backgroundColor: product.colour,
                 marginLeft: 8,
               }}
             />
@@ -69,22 +83,41 @@ const ProductDetails = ({route}) => {
         {product.sizes && product.sizes.length > 0 && (
           <View style={{marginTop: 8}}>
             <Text style={{color: 'black'}}>Available Sizes:</Text>
-            <Text style={{color: 'black'}}>{product.sizes.join(', ')}</Text>
+            <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
+              {product.sizes.map(size => (
+                <TouchableOpacity
+                  key={size}
+                  onPress={() => handleSizeSelect(size)}
+                  style={{
+                    padding: 8,
+                    borderWidth: 1,
+                    borderColor: selectedSize === size ? 'blue' : 'gray',
+                    borderRadius: 4,
+                    margin: 4,
+                    backgroundColor:
+                      selectedSize === size ? 'lightblue' : 'white',
+                  }}>
+                  <Text style={{color: 'black'}}>{size}</Text>
+                </TouchableOpacity>
+              ))}
+            </View>
           </View>
         )}
       </View>
 
       <Button
         title="Add to Cart"
-        onPress={() => dispatch(addToCart(product))}
-        color="#007BFF" // Custom button color
-        style={{marginTop: 16}} // Top margin for button
+        onPress={() => dispatch(addToCart({...product, selectedSize}))} // Add selectedSize to the payload
+        color="#007BFF"
+        style={{marginTop: 16}}
+        disabled={!selectedSize} // Disable button if size not selected
       />
       <Button
         title="Buy Now"
         onPress={() => console.log('Buying product')}
-        color="#28A745" // Custom button color
-        style={{marginTop: 8}} // Top margin for button
+        color="#28A745"
+        style={{marginTop: 8}}
+        disabled={!selectedSize} // Disable button if size not selected
       />
     </ScrollView>
   );
